@@ -72,13 +72,31 @@
 </div>
 
 <script>
+  // 🔹 初期表示（保存データ読み込み）
+  document.addEventListener("DOMContentLoaded", loadTodos);
+
+  // 🔹 Enterキー対応（ここに書くのが正解）
+  const input = document.getElementById("todoInput");
+  input.addEventListener("keypress", e => {
+    if (e.key === "Enter") addTodo();
+  });
+
   function addTodo() {
     const input = document.getElementById("todoInput");
     const text = input.value.trim();
 
     if (text === "") return;
 
+    createTodoElement(text, false);
+    saveTodos();
+
+    input.value = "";
+  }
+
+  function createTodoElement(text, completed) {
     const li = document.createElement("li");
+
+    if (completed) li.classList.add("completed");
 
     li.innerHTML = `
       <span onclick="toggleComplete(this)">${text}</span>
@@ -86,15 +104,36 @@
     `;
 
     document.getElementById("todoList").appendChild(li);
-    input.value = "";
   }
 
   function deleteTodo(el) {
     el.parentElement.remove();
+    saveTodos();
   }
 
   function toggleComplete(el) {
     el.parentElement.classList.toggle("completed");
+    saveTodos();
+  }
+
+  // 🔹 保存処理
+  function saveTodos() {
+    const todos = [];
+    document.querySelectorAll("#todoList li").forEach(li => {
+      todos.push({
+        text: li.innerText.replace("×", "").trim(),
+        completed: li.classList.contains("completed")
+      });
+    });
+    localStorage.setItem("todos", JSON.stringify(todos));
+  }
+
+  // 🔹 読み込み処理
+  function loadTodos() {
+    const todos = JSON.parse(localStorage.getItem("todos")) || [];
+    todos.forEach(todo => {
+      createTodoElement(todo.text, todo.completed);
+    });
   }
 </script>
 
