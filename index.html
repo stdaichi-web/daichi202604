@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Todoリスト</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      margin-top: 50px;
+    }
+
+    .container {
+      background: #fff;
+      padding: 20px;
+      width: 300px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    input {
+      width: 70%;
+      padding: 8px;
+    }
+
+    button {
+      padding: 8px;
+      margin-left: 5px;
+      cursor: pointer;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 15px;
+    }
+
+    li {
+      padding: 8px;
+      background: #eee;
+      margin-bottom: 5px;
+      display: flex;
+      justify-content: space-between;
+      border-radius: 5px;
+    }
+
+    li.completed {
+      text-decoration: line-through;
+      color: gray;
+    }
+
+    .delete {
+      color: red;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Todoリスト</h1>
+  <input type="text" id="todoInput" placeholder="やることを入力">
+  <button onclick="addTodo()">追加</button>
+
+  <ul id="todoList"></ul>
+</div>
+
+<script>
+  function addTodo() {
+    const input = document.getElementById("todoInput");
+    const text = input.value.trim();
+
+    if (text === "") return;
+
+    const li = document.createElement("li");
+
+    li.innerHTML = `
+      <span onclick="toggleComplete(this)">${text}</span>
+      <span class="delete" onclick="deleteTodo(this)">×</span>
+    `;
+
+    document.getElementById("todoList").appendChild(li);
+    input.value = "";
+  }
+
+  function deleteTodo(el) {
+    el.parentElement.remove();
+  }
+
+  function toggleComplete(el) {
+    el.parentElement.classList.toggle("completed");
+  }
+</script>
+
+</body>
+</html>
